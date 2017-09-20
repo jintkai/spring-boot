@@ -17,7 +17,6 @@ public class CollLinuxHost implements CollLinuxHostMBean{
 
 
     public List<KpiDetail> getMemory(){
-        List<KpiDetail> kpiDetails = new ArrayList<KpiDetail>();
         OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory
                 .getOperatingSystemMXBean();
         float totalMem = osmxb.getTotalPhysicalMemorySize()/1024f/1024f;
@@ -36,7 +35,6 @@ public class CollLinuxHost implements CollLinuxHostMBean{
 
     @Override
     public List<KpiDetail> getBaseInfo() {
-        List<KpiDetail> kpiDetails = new ArrayList<KpiDetail>();
         CollBase collBase = new CollBase();
         String unitId = "10-10";
         collBase.addKpi(unitId,"PM-10-10-001",System.getProperty("os.name"));
@@ -50,7 +48,6 @@ public class CollLinuxHost implements CollLinuxHostMBean{
 
     @Override
     public List<KpiDetail> getCpu() {
-        List<KpiDetail> kpiDetails = new ArrayList<KpiDetail>();
         OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory
                 .getOperatingSystemMXBean();
         osmxb.getAvailableProcessors();
