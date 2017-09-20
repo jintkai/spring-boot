@@ -26,4 +26,5 @@ public class HostCollect {
         System.out.println("CpuTime:"+cpuTime+",CpuLoad:"+cpuLoad+",cp");
 
     }
+
 }

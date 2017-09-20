@@ -20,7 +20,7 @@ public class ProjectActionTest extends AbstractTestNGSpringContextTests{
 
     @Test
     public void getProjectTest() throws Exception {
-        projectAction.getProject("4041");
+        System.out.println(projectAction.getProject("4041"));
         projectAction.getProject("40429");
         //mockMvc.perform(get(""));
     }
