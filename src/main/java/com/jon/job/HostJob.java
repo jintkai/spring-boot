@@ -15,7 +15,7 @@ public class HostJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         Date date = new Date();
-        SimpleDateFormat f = new SimpleDateFormat("YY-mm-dd HH:MM:SS");
+        SimpleDateFormat f = new SimpleDateFormat("yy-mm-dd HH:MM:SS");
         String now = f.format(date);
         System.out.println("Current Time:" + now);
         CollLinuxHostMBean bean = new CollLinuxHost();
@@ -23,7 +23,7 @@ public class HostJob implements Job {
     }
 
     public static void main(String... arg) throws SchedulerException {
-        System.out.println("Begin Time:" + new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date()));
+        System.out.println("Begin Time:" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         JobDetail jobDetail = JobBuilder.newJob(HostJob.class).withIdentity("HostJob", "Coll").build();
         SimpleTrigger jobTrigger = (SimpleTrigger) newTrigger().withIdentity("HostTrigger", "Coll").startNow().withSchedule(simpleSchedule().withIntervalInSeconds(2).repeatForever()).build();
 
@@ -33,7 +33,7 @@ public class HostJob implements Job {
         scheduler.scheduleJob(jobDetail, jobTrigger);
         scheduler.start();
 
-        System.out.println("End Time:" + new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date()));
+        System.out.println("End Time:" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
 
     }
