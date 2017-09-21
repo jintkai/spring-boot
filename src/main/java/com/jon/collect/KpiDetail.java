@@ -1,8 +1,6 @@
 package com.jon.collect;
 
-import com.jon.collect.dao.impl.KpiRowMapper;
 
-import java.sql.Time;
 import java.util.Date;
 
 public class KpiDetail {

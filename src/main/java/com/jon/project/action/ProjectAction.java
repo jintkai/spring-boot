@@ -15,13 +15,17 @@ import java.util.Map;
 @SpringBootApplication
 public class ProjectAction {
 
+    private static final String STATUS = "status";
+    private static final String MESSAGE = "message";
+
     @Autowired
     ProjectService projectService;
+
 
     @RequestMapping(method = RequestMethod.GET,value = "/list/{projectName}")
     public Map<String,Object> getProjectList(@PathVariable String projectName){
         Map<String,Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("status",1);
+        resultMap.put(STATUS,1);
         List<TbProject> list = projectService.findProjectList(projectName);
         resultMap.put("lists",list);
         resultMap.put("count",list.size());
@@ -33,15 +37,15 @@ public class ProjectAction {
         Map<String,Object> resultMap = new HashMap<String, Object>();
         TbProject project = (TbProject)projectService.findProject(uid);
         resultMap.put("project",project);
-        resultMap.put("status",1);
+        resultMap.put(STATUS,1);
         return resultMap;
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{uid}")
     public Map<String,Object> deleteProject(@PathVariable String uid){
         Map<String,Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("status",1);
-        resultMap.put("message",projectService.deleteProject(uid));
+        resultMap.put(STATUS,1);
+        resultMap.put(MESSAGE,projectService.deleteProject(uid));
         return resultMap;
     }
 
@@ -54,11 +58,11 @@ public class ProjectAction {
         tbProject.setProjectDesc(desc);
         int i = projectService.addProject(tbProject);
         if ( 0 ==i){
-            resultMap.put("status",0);
-            resultMap.put("message","插入项目信息失败！");
+            resultMap.put(STATUS,0);
+            resultMap.put(MESSAGE,"插入项目信息失败！");
         }else{
-            resultMap.put("status",1);
-            resultMap.put("message","添加成功！");
+            resultMap.put(STATUS,1);
+            resultMap.put(MESSAGE,"添加成功！");
         }
         return resultMap;
     }

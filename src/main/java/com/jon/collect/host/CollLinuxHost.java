@@ -4,13 +4,10 @@ import com.jon.collect.CollBase;
 import com.jon.collect.KpiDetail;
 import com.sun.management.OperatingSystemMXBean;
 import org.springframework.stereotype.Component;
-import org.testng.annotations.Test;
 
 import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 @Component
 public class CollLinuxHost implements CollLinuxHostMBean{
@@ -51,7 +48,7 @@ public class CollLinuxHost implements CollLinuxHostMBean{
         OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory
                 .getOperatingSystemMXBean();
         osmxb.getAvailableProcessors();
-        int cpuCount =osmxb.getAvailableProcessors();
+//        int cpuCount =osmxb.getAvailableProcessors();
 
         return null;
     }

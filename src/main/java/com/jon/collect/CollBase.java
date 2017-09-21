@@ -7,8 +7,8 @@ import java.util.List;
 public class CollBase {
     private List<KpiDetail> kpiList = new ArrayList<KpiDetail>();
 
-    public void addKpi(KpiDetail KpiDetail){
-        kpiList.add(KpiDetail);
+    public void addKpi(KpiDetail kpiDetail){
+        kpiList.add(kpiDetail);
     }
     public void addKpi(String unitId,String kpiId,String kpivalue){
         KpiDetail kpi = new KpiDetail(unitId,kpiId,kpivalue, new Date());

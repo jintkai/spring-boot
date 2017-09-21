@@ -12,8 +12,7 @@ public class KpiRowMapper implements RowMapper<KpiDetail> {
     public KpiDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
         if (null == rs)
             return null;
-        KpiDetail kpiDetail = new KpiDetail(rs.getString("unitid"),rs.getString("kpiid"),rs.getString("kpivalue"),
+        return new KpiDetail(rs.getString("unitid"),rs.getString("kpiid"),rs.getString("kpivalue"),
                 rs.getDate("clltime"),rs.getDate("instime"));
-        return kpiDetail;
     }
 }

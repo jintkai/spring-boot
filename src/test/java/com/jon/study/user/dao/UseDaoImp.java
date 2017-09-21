@@ -1,4 +1,4 @@
-package com.jon.study.User.dao;
+package com.jon.study.user.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
