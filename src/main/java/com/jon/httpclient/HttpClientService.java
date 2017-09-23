@@ -50,8 +50,6 @@ public class HttpClientService {
         HttpMethod method = (HttpMethod) object;
         try {
             method.setURI(new URI(requestUrl));
-            //method.setQueryString(requestParameters);
-
             if ( null != requestParameters && !requestParameters.isEmpty()) {
                 if(!isJson(requestParameters)) {
                     List<NameValuePair> lists = new ArrayList<NameValuePair>();
