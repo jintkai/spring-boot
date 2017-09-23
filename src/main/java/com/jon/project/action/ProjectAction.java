@@ -88,4 +88,9 @@ public class ProjectAction {
         }
         return resultMap;
     }
+    @RequestMapping(method = RequestMethod.POST, value = "/addproject", consumes = "application/json")
+    public Map<String,Object> addProject(@RequestBody TbProject project   ){
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        return addProject(project.getProjectKey(),project.getProjectName(),project.getProjectDesc());
+    }
 }

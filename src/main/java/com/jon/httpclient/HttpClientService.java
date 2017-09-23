@@ -1,16 +1,20 @@
 package com.jon.httpclient;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.methods.GetMethod;
+import javafx.geometry.Pos;
+import org.apache.commons.httpclient.*;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Component
 public class HttpClientService {
@@ -46,15 +50,42 @@ public class HttpClientService {
         HttpMethod method = (HttpMethod) object;
         try {
             method.setURI(new URI(requestUrl));
-            method.setQueryString(requestParameters);
-            method.getResponseFooters();
-            //method.setParams();
+            //method.setQueryString(requestParameters);
+
+            if ( null != requestParameters && !requestParameters.isEmpty()) {
+                if(!isJson(requestParameters)) {
+                    List<NameValuePair> lists = new ArrayList<NameValuePair>();
+                    String str = requestParameters;
+                    String[] strs = str.split(",");
+                    Map<String, String> m = new HashMap<String, String>();
+                    for (int i = 0; i < strs.length; i++) {
+                        String s = strs[i];
+                        String[] ms = s.split("=");
+                        m.put(ms[0], ms[1]);
+                        lists.add(new NameValuePair(ms[0], ms[1]));
+                    }
+                    NameValuePair[] pairs = new NameValuePair[lists.size()];
+                    for (int i = 0; i < lists.size(); i++) {
+                        pairs[i] = lists.get(i);
+                    }
+                    method.setQueryString(pairs);
+                    map.put("QueryString", Arrays.toString(pairs));
+                }else{
+                    RequestEntity entity = new StringRequestEntity(requestParameters) ;
+                    ((PostMethod)method).setRequestEntity(entity);
+
+                    map.put("QueryString",requestParameters);
+                    method.setRequestHeader(new Header("Content-Type","application/json"));
+                }
+
+            }
         } catch (URIException e) {
             e.printStackTrace();
         }
-        //GetMethod method = new GetMethod(requestUrl);
 
         HttpClient httpClient = new HttpClient();
+
+
         try {
             Date begin = new Date();
             httpClient.executeMethod(method);
@@ -68,12 +99,23 @@ public class HttpClientService {
             String response = method.getResponseBodyAsString();
             map.put("StatusCode",String.valueOf(method.getStatusCode()));
             map.put("ResponseBody",response);
-            method.getRequestHeaders().toString();
+            map.put("RequestHeaders",Arrays.toString(method.getRequestHeaders()));
             return map;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean isJson(String str){
+        boolean isJson = false;
+        try {
+            JSONObject jsonObject = new JSONObject(str);
+            isJson = true;
+        } catch (JSONException e) {
+            isJson = false;
+        }
+        return isJson;
     }
 
 }

@@ -29,7 +29,8 @@ public class CaseControllerService {
             for (CaseSuit casesuit :cases) {
                 Map<String,String> map = httpClientService.sentRequest(casesuit.getRequestType(),casesuit.getRequestUrl(),casesuit.getRequestHeader(),
                         casesuit.getRequestParamets());
-                SuitResult result = new SuitResult(casesuit.getId(),casesuit.getRequestParamets(),map.get("StatusCode"),
+                String detail = "QueryString:"+map.get("QueryString")+",RequestHeaders:"+map.get("RequestHeaders");
+                SuitResult result = new SuitResult(casesuit.getId(),detail,map.get("StatusCode"),
                         map.get("ResponseBody"),map.get("ResponseTime"));
                 caseSuitService.saveCASEResultLog(result);
             }
