@@ -28,13 +28,15 @@ public class DataSourceConfig {
     public DataSource dataSource() {
         ComboPooledDataSource ds = new ComboPooledDataSource();
         try {
-            ds.setDriverClass("org.h2.Driver");
+            //ds.setDriverClass("org.h2.Driver");
+            ds.setDriverClass("com.mysql.jdbc.Driver");
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
-        ds.setJdbcUrl("jdbc:h2:tcp://localhost/~/test");
-        ds.setUser("sa");
-        ds.setPassword("");
+        //ds.setJdbcUrl("jdbc:h2:tcp://localhost/~/test");
+        ds.setJdbcUrl("jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=utf-8");
+        ds.setUser("root");
+        ds.setPassword("jinkai1987");
         return ds;
     }
 

@@ -18,7 +18,7 @@ public class SampleController {
         return "Hello World!";
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(SampleController.class, args);
-    }
+//    public static void main(String[] args) {
+//        SpringApplication.run(SampleController.class, args);
+//    }
 }

@@ -15,10 +15,10 @@ public class CollLinuxHostTest extends AbstractTestNGSpringContextTests {
     CollLinuxHostService service;
     @Test
     public void test(){
-        service.collLinuxHostInfo();
+        //service.collLinuxHostInfo();
     }
     @Test
     public void testMem(){
-        service.collLinuxHostMem();
+        //service.collLinuxHostMem();
     }
 }

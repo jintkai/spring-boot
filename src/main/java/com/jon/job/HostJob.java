@@ -22,7 +22,7 @@ public class HostJob implements Job {
         bean.getBaseInfo();
     }
 
-    public static void main(String... arg) throws SchedulerException {
+    public void test()throws SchedulerException {
         System.out.println("Begin Time:" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         JobDetail jobDetail = JobBuilder.newJob(HostJob.class).withIdentity("HostJob", "Coll").build();
         SimpleTrigger jobTrigger = (SimpleTrigger) newTrigger().withIdentity("HostTrigger", "Coll").startNow().withSchedule(simpleSchedule().withIntervalInSeconds(2).repeatForever()).build();
