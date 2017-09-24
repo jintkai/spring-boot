@@ -19,7 +19,7 @@ public class CaseSuitService {
         return caseSuitDaoImp.getCaseSuitBySuit(suitId);
     }
 
-    public void saveCASEResultLog(SuitResult result){
+    public void saveCaseResultLog(SuitResult result){
         caseSuitDaoImp.saveCaseResultLog(result);
     }
 }

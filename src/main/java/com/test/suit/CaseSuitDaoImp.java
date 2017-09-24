@@ -39,7 +39,7 @@ public class CaseSuitDaoImp extends BaseDao{
 
 
     public int saveCaseResultLog(SuitResult result){
-        return jdbcTemplate.update("insert into qa_case_result_log(suitId,detail,status,resultBody,responseTime,inserttime) values(?,?,?,?,?,now())",
-                result.getSuitGuid(),result.getRequestParameter(),result.getStatus(),result.getResultBody(),result.getResponseTime());
+        return jdbcTemplate.update("insert into qa_case_result_log(suitId,detail,status,resultBody,responseTime,assertLog,resultStatus,inserttime) values(?,?,?,?,?,?,?,now())",
+                result.getSuitGuid(),result.getRequestParameter(),result.getStatus(),result.getResultBody(),result.getResponseTime(),result.getAssertLog(),result.getResultStatus());
     }
 }

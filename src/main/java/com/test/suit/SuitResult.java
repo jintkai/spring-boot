@@ -7,13 +7,33 @@ public class SuitResult {
     private String status;
     private String resultBody;
     private String responseTime;
+    private String assertLog;
+    private int resultStatus;
 
-    public SuitResult(String suitGuid, String requestParameter, String status, String resultBody, String responseTime) {
+    public SuitResult(String suitGuid, String requestParameter, String status, String resultBody, String responseTime, String assertLog, int resultStatus) {
         this.suitGuid = suitGuid;
         this.requestParameter = requestParameter;
         this.status = status;
         this.resultBody = resultBody;
         this.responseTime = responseTime;
+        this.assertLog = assertLog;
+        this.resultStatus = resultStatus;
+    }
+
+    public String getAssertLog() {
+        return assertLog;
+    }
+
+    public void setAssertLog(String assertLog) {
+        this.assertLog = assertLog;
+    }
+
+    public int getResultStatus() {
+        return resultStatus;
+    }
+
+    public void setResultStatus(int resultStatus) {
+        this.resultStatus = resultStatus;
     }
 
     public String getResponseTime() {
