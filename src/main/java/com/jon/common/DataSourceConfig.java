@@ -22,9 +22,6 @@ public class DataSourceConfig {
                 .addScript("classpath:schema.sql")
                 .addScript("classpath:test-data.sql")
                 .build();
-
-
-
     }
 
     @Bean
