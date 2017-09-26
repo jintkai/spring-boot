@@ -31,4 +31,5 @@ public class CaseSuitService {
     public List<CaseSuit> getCaseBySuitAndBuildID(String suitId,int buildId){
         return caseSuitDaoImp.getClassUitBySuitAndBuildId(suitId,buildId);
     }
+
 }

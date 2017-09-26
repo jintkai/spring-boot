@@ -13,14 +13,14 @@ public class AssertServer {
 
 
 
-    private Map<String,Object> map = new HashMap<>();
+    private Map<String,Object> map = new HashMap<String,Object>();
 
     private List<AssertExp> assertExpList;
-    private List<AssertResult> assertResults = new ArrayList<>();
+    private List<AssertResult> assertResults = new ArrayList<AssertResult>();
     private boolean success = true;
     private SuitResult result;
 
-    private Map<String,Object> resultMap = new HashMap<>();
+    private Map<String,Object> resultMap = new HashMap<String,Object>();
 
     public AssertServer(List<AssertExp> list, SuitResult result) {
         this.assertExpList = list;
