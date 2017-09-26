@@ -1,4 +1,4 @@
-package com.test.suit;
+package com.test.suit.domain;
 
 public class CaseSuit {
 
@@ -14,6 +14,34 @@ public class CaseSuit {
     private int requestOrder;
     private int caseResult;
     private String assertExp;
+    private int buildId;
+
+    public CaseSuit() {
+    }
+
+    public CaseSuit(String id, String suitKey, String suitName, String caseId, int requestType, String requestUrl, String requestHeader, String requestParamets, String requestDependent, int requestOrder, int caseResult, String assertExp, int buildId) {
+        this.id = id;
+        this.suitKey = suitKey;
+        this.suitName = suitName;
+        this.caseId = caseId;
+        this.requestType = requestType;
+        this.requestUrl = requestUrl;
+        this.requestHeader = requestHeader;
+        this.requestParamets = requestParamets;
+        this.requestDependent = requestDependent;
+        this.requestOrder = requestOrder;
+        this.caseResult = caseResult;
+        this.assertExp = assertExp;
+        this.buildId = buildId;
+    }
+
+    public int getBuildId() {
+        return buildId;
+    }
+
+    public void setBuildId(int buildId) {
+        this.buildId = buildId;
+    }
 
     public String getSuitKey() {
         return suitKey;

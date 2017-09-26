@@ -1,4 +1,4 @@
-package com.test.caseassert;
+package com.test.caseassert.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

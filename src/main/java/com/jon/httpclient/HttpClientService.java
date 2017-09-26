@@ -67,16 +67,18 @@ public class HttpClientService {
                         pairs[i] = lists.get(i);
                     }
                     method.setQueryString(pairs);
-                    map.put("QueryString", Arrays.toString(pairs));
+                    map.put("RequestParam", Arrays.toString(pairs));
                 }else{
                     RequestEntity entity = new StringRequestEntity(requestParameters) ;
                     ((PostMethod)method).setRequestEntity(entity);
 
-                    map.put("QueryString",requestParameters);
+                    map.put("RequestParam",requestParameters);
                     method.setRequestHeader(new Header("Content-Type","application/json"));
                 }
 
             }
+
+            map.put("URI",method.getURI().toString());
         } catch (URIException e) {
             e.printStackTrace();
         }
@@ -95,9 +97,10 @@ public class HttpClientService {
         }
         try {
             String response = method.getResponseBodyAsString();
-            map.put("StatusCode",String.valueOf(method.getStatusCode()));
+            map.put("ResponseCode",String.valueOf(method.getStatusCode()));
             map.put("ResponseBody",response);
             map.put("RequestHeaders",Arrays.toString(method.getRequestHeaders()));
+            map.put("ResponseHeaders",Arrays.toString(method.getResponseHeaders()));
             return map;
         } catch (IOException e) {
             e.printStackTrace();
