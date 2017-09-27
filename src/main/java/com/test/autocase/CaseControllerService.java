@@ -40,7 +40,6 @@ public class CaseControllerService {
                 Map<String,String> map = httpClientService.sentRequest(casesuit.getRequestType(),casesuit.getRequestUrl(),casesuit.getRequestHeader(),
                         casesuit.getRequestParamets());
 
-
                 Map<String,Object> requestMap = new HashMap<>();
                 requestMap.put("RequestHeaders",map.get("RequestHeaders"));
                 requestMap.put("RequestParam",map.get("RequestParam"));
@@ -67,10 +66,10 @@ public class CaseControllerService {
                         Map<String,Object> resultMap = (Map<String, Object>) assertServer.assertResult().get("assertResult");
 
                         if((boolean) resultMap.get("success")){
-                            resultStatus =1;
+                            resultStatus = 1;
                         }
                         else
-                            resultStatus =2;
+                            resultStatus = 2;
                         result.setAssertLog(r);
                         result.setStatus(resultStatus);
 
