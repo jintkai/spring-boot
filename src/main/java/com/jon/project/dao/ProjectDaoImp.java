@@ -68,7 +68,7 @@ public class ProjectDaoImp  extends BaseDao implements ProjectDao{
 
     @Override
     public List<TbProject> findProjectList(String projectName) {
-        List<TbProject> list = jdbcTemplate.query("select * from project where projectname like '%'||?||'%'",new Object[]{projectName},new RowMapper<TbProject>() {
+        List<TbProject> list = jdbcTemplate.query("select * from project where projectname like concat('%',?,'%')",new Object[]{projectName},new RowMapper<TbProject>() {
             @Override
             public TbProject mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return setProject(rs,rowNum);
