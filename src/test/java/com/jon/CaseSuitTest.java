@@ -20,7 +20,7 @@ public class CaseSuitTest  extends AbstractTestNGSpringContextTests {
 
     @Autowired
     CaseControllerService caseControllerService;
-    @Test
+    //@Test
     public void test(){
         caseControllerService.runCase();
     }
