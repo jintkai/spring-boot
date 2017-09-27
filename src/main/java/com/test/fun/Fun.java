@@ -23,33 +23,34 @@ import java.util.regex.Pattern;
  * a,b参数不能包含字符,(,),FUN_
  * 方法的返还结果中也不能包含,(,),FUN_
  */
-@Service
+
 public class Fun {
 
 
     public String resolveFun(String funExp){
         String str = funExp;
         while (true) {
-            if (str.contains("$FUN_")) {
+            if (str.contains("FUN")) {
                 int end = str.indexOf("_)");
                 String tmp = str.substring(0,end+2);
-                int begin = tmp.lastIndexOf("$FUN_");
+                int begin = tmp.lastIndexOf("FUN");
                 String fun = tmp.substring(begin);
                 String funReturn = "";
 
-                if (fun.contains("$FUN_B_("))
-                    funReturn = FUN_B();
+                if (fun.contains("FUNB_("))
+                    funReturn = FUN_B(fun);
                 else if (fun.contains("FUN_BD_("))
                     funReturn = FUN_BD(fun);
                 else if(fun.contains("FUN_CD_("))
                     funReturn = FUN_CD(fun);
                 else if(fun.contains("FUN_AA_("))
                     funReturn = FUN_AA(fun);
-                else if (fun.contains("$FUN_SUBSTRING_("))
+                else if (fun.contains("FUNSUBSTRING_("))
                     funReturn = funGetSubstring(fun);
-                if (fun.contains("$FUN_JSON_"))
+                if (fun.contains("FUNJSON_("))
                     funReturn = funGetJsonValue(fun);
-
+                if (fun.contains("FUNRANDOM_("))
+                    funReturn = funRandom(fun);
                 // * . ? + $ ^ [ ] ( ) { } | \ /
                 fun = fun.replace("(","\\(").replace(")","\\)").replace("$","\\$");
                 fun = fun.replace("{","\\{").replace("}","\\}");
@@ -69,8 +70,11 @@ public class Fun {
     }
 
 
-    public String FUN_B(){
-        return "fun!"+"H"+"!";
+    public String FUN_B(String fun){
+        String a = fun.substring(fun.indexOf("_(")+2,fun.indexOf("_,"));
+        String b = fun.substring(fun.indexOf("_,")+2,fun.indexOf("_)")).trim();
+
+        return a+b;
     }
     public String FUN_BD(String fun){
         String a = fun.substring(fun.indexOf("(")+1,fun.indexOf(","));
@@ -123,6 +127,13 @@ public class Fun {
         }
 
         return value;
+    }
+
+    public String funRandom(String fun){
+        int r = Integer.parseInt(fun.substring(fun.indexOf("_(")+2,fun.indexOf("_)")));
+        int i = ((int) (Math.random() * 10)) % r;
+        return String.valueOf(i);
+
     }
 
 }
