@@ -1,6 +1,7 @@
 package com.jon;
 
 import com.test.autocase.CaseControllerService;
+import com.test.fun.Fun;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ public class CaseSuitTest  extends AbstractTestNGSpringContextTests {
 
     @Autowired
     CaseControllerService caseControllerService;
-    //@Test
+
+
+    @Test
     public void test(){
         caseControllerService.runCase();
     }
@@ -50,29 +53,16 @@ public class CaseSuitTest  extends AbstractTestNGSpringContextTests {
     }
 
 
-    public void test(String ... arg){
+    @Test
+    public void test1(){
+
+        //System.out.println(fun.toString());
+        //String exp = "$FUN_SUBSTRING_($FUN_SUBSTRING_( hello,world _, _,d _)_,e_,r_)";
+        //String json = "{\"message\":\"插入项目信息失败，项目key已经存在！\",\"status\":0}";
 
 
+        String exp = "$FUN_JSON_($FUN_JSON_(  {\"message\":{\"a\":\"插入项目信息失败，项目key已经存在！\",\"b\":\"123\"},\"status\":0} _,message _)_,a_)";
 
-        String url = "http://172.12.1.123/test.txt";
-        String regex = "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(url);
-
-        //System.out.println("是否匹配:" + matcher.matches());
-        while (matcher.find()) {
-            String result = matcher.group(1);
-            System.out.println("result = "+result);
-        }
-        String str = "FUN_AA(a,FUN_B(),FUN_CD1(a,FUN_A78D(b)))";
-
-        String regex1 = "FUN_B.+\\(";
-        pattern =Pattern.compile(regex1);
-        matcher = pattern.matcher(str);
-        while (matcher.find()) {
-            String result = matcher.group(1);
-            System.out.println("matcher = "+result);
-        }
 
     }
 

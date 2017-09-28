@@ -1,30 +1,28 @@
 package com.jon.httpclient;
 
-import javafx.geometry.Pos;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.commons.httpclient.params.HttpClientParams;
-import org.apache.http.entity.StringEntity;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Component
 public class HttpClientService {
 
-    public Map<String,String> sentRequest(int requestType, String requestUrl, String requestHeader, String requestParameters) {
+    public Map<String, String> sentRequest(int requestType, String requestUrl, String requestHeader, String requestParameters) {
 
-        Map<String,String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
         Class<?> cls = null;
         String className = "";
-        switch (requestType){
+        switch (requestType) {
             case 0:
                 className = "org.apache.commons.httpclient.methods.GetMethod";
                 break;
@@ -48,10 +46,25 @@ public class HttpClientService {
             e.printStackTrace();
         }
         HttpMethod method = (HttpMethod) object;
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(requestHeader);
+
+            Iterator iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                method.setRequestHeader(key, jsonObject.getString(key));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             method.setURI(new URI(requestUrl));
-            if ( null != requestParameters && !requestParameters.isEmpty()) {
-                if(!isJson(requestParameters)) {
+
+            if (null != requestParameters && !requestParameters.isEmpty()) {
+                String contentType = method.getRequestHeader("Content-Type").getValue();
+
+                if (!contentType.contains("application/json")) {
                     List<NameValuePair> lists = new ArrayList<NameValuePair>();
                     String str = requestParameters;
                     String[] strs = str.split(",");
@@ -66,19 +79,28 @@ public class HttpClientService {
                     for (int i = 0; i < lists.size(); i++) {
                         pairs[i] = lists.get(i);
                     }
-                    method.setQueryString(pairs);
+                    //form表单
+                    if (1 == requestType) {
+                        Part[] parts = new Part[lists.size()];
+                        for (int i =0;i<lists.size();i++){
+                            parts[i] = new StringPart(lists.get(i).getName(),lists.get(i).getValue());
+                        }
+                        method = (PostMethod) method;
+                        ((PostMethod) method).setRequestEntity(new MultipartRequestEntity(parts, method.getParams()));
+                    } else {
+                        method.setQueryString(pairs);
+                    }
                     map.put("RequestParam", Arrays.toString(pairs));
-                }else{
-                    RequestEntity entity = new StringRequestEntity(requestParameters) ;
-                    ((PostMethod)method).setRequestEntity(entity);
-
-                    map.put("RequestParam",requestParameters);
-                    method.setRequestHeader(new Header("Content-Type","application/json"));
                 }
+                else {
+                    RequestEntity entity = new StringRequestEntity(requestParameters);
+                    ((PostMethod) method).setRequestEntity(entity);
 
+                    map.put("RequestParam", requestParameters);
+                }
             }
 
-            map.put("URI",method.getURI().toString());
+            map.put("URI", method.getURI().toString());
         } catch (URIException e) {
             e.printStackTrace();
         }
@@ -86,21 +108,24 @@ public class HttpClientService {
         HttpClient httpClient = new HttpClient();
 
 
+
+
+
         try {
             Date begin = new Date();
             httpClient.executeMethod(method);
             Date end = new Date();
             long responseTime = end.getTime() - begin.getTime();
-            map.put("ResponseTime",String.valueOf(responseTime));
+            map.put("ResponseTime", String.valueOf(responseTime));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
             String response = method.getResponseBodyAsString();
-            map.put("ResponseCode",String.valueOf(method.getStatusCode()));
-            map.put("ResponseBody",response);
-            map.put("RequestHeaders",Arrays.toString(method.getRequestHeaders()));
-            map.put("ResponseHeaders",Arrays.toString(method.getResponseHeaders()));
+            map.put("ResponseCode", String.valueOf(method.getStatusCode()));
+            map.put("ResponseBody", response);
+            map.put("RequestHeaders", Arrays.toString(method.getRequestHeaders()));
+            map.put("ResponseHeaders", Arrays.toString(method.getResponseHeaders()));
             return map;
         } catch (IOException e) {
             e.printStackTrace();
@@ -108,7 +133,7 @@ public class HttpClientService {
         return null;
     }
 
-    public boolean isJson(String str){
+    public boolean isJson(String str) {
         boolean isJson = false;
         try {
             JSONObject jsonObject = new JSONObject(str);

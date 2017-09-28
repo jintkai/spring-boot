@@ -17,6 +17,9 @@ public class AssertResult {
     public AssertResult() {
     }
 
+    public void setLog(String log) {
+        this.log = log;
+    }
 
     public AssertResult(AssertExp exp, boolean success, String log) {
         this.exp = exp;
