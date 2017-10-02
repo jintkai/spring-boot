@@ -7,6 +7,7 @@ import com.test.suit.domain.SuitResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Component
@@ -28,8 +29,13 @@ public class CaseSuitService {
         suitResultDaoImp.saveCaseResult(result);
     }
 
-    public List<CaseSuit> getCaseBySuitAndBuildID(String suitId,int buildId){
-        return caseSuitDaoImp.getClassUitBySuitAndBuildId(suitId,buildId);
+
+    public List<CaseSuit> getCaseBySuitAndBuildID(String suitKey,int buildId){
+        return caseSuitDaoImp.getClassUitBySuitAndBuildId(suitKey,buildId);
+    }
+
+    public List<SuitResult> getSuitCaseResultByID(int suitId,int buildId){
+        return suitResultDaoImp.findCaseResultByID(suitId,buildId);
     }
 
 }

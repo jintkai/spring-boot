@@ -40,7 +40,7 @@ public class CaseSuitDaoImp extends BaseDao{
 
     public List<CaseSuit> getClassUitBySuitAndBuildId(String suitId,int buildId){
         return jdbcTemplate.query("select id,suitKey,suitName,caseid,requestType,requestUrl,requestHeader," +
-                        "requestParameters,requestOrder,requestDependent,caseResult,assertExp,buildId from qa_suitcase where suitKey =? and buildId=? order by requestOrder desc",
+                        "requestParameters,requestOrder,requestDependent,caseResult,assertExp,buildId from qa_suitcase where suitKey =? and buildId=? order by requestOrder",
                 new SuitRowMapper(), suitId, buildId);
     }
     /*
