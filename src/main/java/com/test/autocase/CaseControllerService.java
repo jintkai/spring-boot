@@ -70,9 +70,9 @@ public class CaseControllerService {
                 int resultStatus = 0;
                 if (null != exp && !exp.isEmpty()){
                     try {
-                        List<AssertExp> assertExpList = new ObjectMapper().readValue(exp,new TypeReference<List<AssertExp>>() { });
+                        List<String> assertExpList = new ObjectMapper().readValue(exp,new TypeReference<List<String>>() { });
                         assertServer.setResult(result);
-                        Object object = assertServer.assertResult(assertExpList).get("assertResult");
+                        Object object = assertServer.assertResult(assertExpList,result);
                         String r = mapper.writeValueAsString(object);
                         Map<String,Object> resultMap = (Map<String, Object>) object;
 
@@ -92,16 +92,6 @@ public class CaseControllerService {
 
                 caseSuitService.saveCaseResultLog(result);
 
-                //assertServer.setResultMap(null);
-                /*
-                assertServer.setAssertExpList(null);
-                assertServer.setMap(null);
-                assertServer.setSuccess(true);
-
-
-                assertServer.setAssertResults(null);
-                assertServer.setResultMap(null);
-                */
             }
         }
     }

@@ -27,17 +27,6 @@ public class Fun {
     CaseSuitService caseSuitService;
 
     @Deprecated
-    public String resolveFun(String funExp) {
-/**
- * 自定义函数类，用户自定义函数放在此类中，同时也负责解析用户输入的function表达式*
- * FUN_AA(a,b);
- * a,b参数不能包含字符,(,),FUN_
- * 方法的返还结果中也不能包含,(,),FUN_
- */
-
-public class Fun {
-
-
     public String resolveFun(String funExp){
         String str = funExp;
         while (true) {
