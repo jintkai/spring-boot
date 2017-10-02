@@ -36,13 +36,11 @@ public class FunAspect {
 
             tmp = (String) args[2];
             args[2] = funService.resolveFun(tmp,null);
-            System.out.println("________________________" + args[2]);
         }
         if(null != args[3]) {
 
             tmp = (String) args[3];
             args[3] = funService.resolveFun(tmp,null);
-            System.out.println("________________________" + args[3]);
         }
         Object retVal = pjp.proceed(args);
         return retVal;

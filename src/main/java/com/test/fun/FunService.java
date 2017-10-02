@@ -12,6 +12,10 @@ public class FunService {
     Fun fun ;
 
     public String resolveFun(String source,Object object){
+
+
+    public String resolveFun(String source){
+
         String result = source;
         int begin = source.indexOf("{{");
         int end = source.indexOf("}}");
@@ -34,7 +38,11 @@ public class FunService {
         return result;
     }
 
-
-
+    @Test
+    public void test(){
+        //resolveFun("http://localhost:8095/project/list/{{FUNB_(1_,2_)}}/abc{{FUNB_(2_,3_)}}");
+        String s= resolveFun("http://localhost:8095/project/list/{{FUNB_(FUNRANDOM_(5_)_,2_)}}/abc");
+        System.out.println(s);
+    }
 }
 

@@ -29,6 +29,7 @@ public class CaseSuitService {
         suitResultDaoImp.saveCaseResult(result);
     }
 
+
     public List<CaseSuit> getCaseBySuitAndBuildID(String suitKey,int buildId){
         return caseSuitDaoImp.getClassUitBySuitAndBuildId(suitKey,buildId);
     }

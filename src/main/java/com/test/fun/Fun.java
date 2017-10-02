@@ -9,6 +9,8 @@ import com.test.suit.domain.SuitResult;
 import com.test.suit.service.CaseSuitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.test.suit.service.CaseSuitService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.testng.annotations.Test;
 
@@ -26,6 +28,17 @@ public class Fun {
 
     @Deprecated
     public String resolveFun(String funExp) {
+/**
+ * 自定义函数类，用户自定义函数放在此类中，同时也负责解析用户输入的function表达式*
+ * FUN_AA(a,b);
+ * a,b参数不能包含字符,(,),FUN_
+ * 方法的返还结果中也不能包含,(,),FUN_
+ */
+
+public class Fun {
+
+
+    public String resolveFun(String funExp){
         String str = funExp;
         while (true) {
             if (str.contains("FUN")) {
@@ -34,8 +47,6 @@ public class Fun {
                 int begin = tmp.lastIndexOf("FUN");
                 String fun = tmp.substring(begin);
                 String funReturn = "";
-
-
                 if (fun.contains("FUNSuit_("))
                     funReturn = funGetBodyBySuitID(fun);
                 else if (fun.contains("FUNSUBSTRING_("))
@@ -116,14 +127,12 @@ public class Fun {
         String begin = fun.substring(firstIndex + 2, secendIndex);
         String end = fun.substring(secendIndex + 2, fun.indexOf("_)"));
         String result = source.substring(source.indexOf(begin) + begin.length(), source.indexOf(end));
-
         return result;
     }
 
     public String funGetJsonValue(String fun) {
         String json = fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_,"));
         String key = fun.substring(fun.indexOf("_,") + 2, fun.indexOf("_)")).trim();
-
 
         ObjectMapper mapper = new ObjectMapper();
 
