@@ -14,7 +14,7 @@ public class SuitResultDaoImp extends BaseDao {
 
     public int saveCaseResult(SuitResult result){
         return jdbcTemplate.update(
-                "insert into qa_case_result_log(buildId,suitId,requestInfo,responseHeaders,responseBody," +
+                "insert into qa_case_result_his(buildId,suitId,requestInfo,responseHeaders,responseBody," +
                         "responseCode,responseTime,assertLog,status,inserttime) values(?,?,?,?,?,?,?,?,?,now())",
                 result.getBuildId(),result.getSuitid(),result.getRequestInfo(),result.getResponseHeaders(),result.getResponseBody(),
                 result.getResponseCode(),result.getResponseTime(),result.getAssertLog(),result.getStatus());
@@ -22,7 +22,7 @@ public class SuitResultDaoImp extends BaseDao {
 
     public List<SuitResult> findCaseResultByID(int suitid,int buildID){
         return jdbcTemplate.query("select id,buildid,suitid,responseCode,responseBody,responseTime,status" +
-                        " from qa_case_result_log where suitid =? order by buildid",
+                        " from qa_case_result_his where suitid =? order by buildid",
                 new SuitResultRowMapper(), suitid);
     }
 }
