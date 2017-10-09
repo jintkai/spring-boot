@@ -29,6 +29,12 @@ public class HttpClientService {
             case 1:
                 className = "org.apache.commons.httpclient.methods.PostMethod";
                 break;
+            case 2:
+                className = "org.apache.commons.httpclient.methods.PostMethod";
+                break;
+            case 3:
+                className = "org.apache.commons.httpclient.methods.DeleteMethod";
+                break;
             default:
                 className = "org.apache.commons.httpclient.methods.GetMethod";
         }
