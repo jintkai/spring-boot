@@ -5,6 +5,7 @@ import java.util.Date;
 public class SuitResult {
 
     private String suitid;
+    private String suitKey;
     private int buildId;
     private int id;
     private String requestInfo;
@@ -19,9 +20,10 @@ public class SuitResult {
     public SuitResult() {
     }
 
-    public SuitResult(String suitid, int buildId, String requestInfo, String responseHeaders, String responseBody, String responseCode,
+    public SuitResult(String suitid, String suitKey,int buildId, String requestInfo, String responseHeaders, String responseBody, String responseCode,
                       int responseTime) {
         this.suitid = suitid;
+        this.suitKey = suitKey;
         this.buildId = buildId;
         this.requestInfo = requestInfo;
         this.responseHeaders = responseHeaders;
@@ -31,6 +33,14 @@ public class SuitResult {
         this.assertLog = assertLog;
         this.status = status;
         this.insertTime = insertTime;
+    }
+
+    public String getSuitKey() {
+        return suitKey;
+    }
+
+    public void setSuitKey(String suitKey) {
+        this.suitKey = suitKey;
     }
 
     public String getResponseCode() {

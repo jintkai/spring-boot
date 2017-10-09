@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.test.suit.dao.SuitResultDaoImp;
 import com.test.suit.domain.CaseSuit;
 import com.test.suit.domain.SuitResult;
 import com.test.suit.service.CaseSuitService;
@@ -26,6 +27,9 @@ public class Fun {
     @Autowired
     CaseSuitService caseSuitService;
 
+    @Autowired
+    SuitResultDaoImp suitResultDaoImp;
+
     @Deprecated
     public String resolveFun(String funExp){
         String str = funExp;
@@ -38,7 +42,7 @@ public class Fun {
                 String funReturn = "";
                 if (fun.contains("FunSuit_("))
                     funReturn = funGetBodyBySuitID(fun);
-                else if (fun.contains("FunSUBSTRING_("))
+                if (fun.contains("FunSUBSTRING_("))
                     funReturn = funGetSubstring(fun);
                 if (fun.contains("FunJson_("))
                     funReturn = funGetJsonData(fun);
@@ -80,7 +84,7 @@ public class Fun {
                 if (fun.contains("FunResponseJson_("))
                     funReturn = getBodyJson(fun,object);
                 if (fun.contains("FunSuit_("))
-                    funReturn = funGetBodyBySuitID(fun);
+                    funReturn = funGetBodyBySuitID(fun,object);
                 else if (fun.contains("FunSUBSTRING_("))
                     funReturn = funGetSubstring(fun);
                 if (fun.contains("FunJson_("))
@@ -151,12 +155,7 @@ public class Fun {
         return String.valueOf(i);
     }
 
-    //获取case的body
-    public String funGetBodyBySuitID(String fun) {
-        int suitId = Integer.parseInt(fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_)")));
-        List<SuitResult> suitResults = caseSuitService.getSuitCaseResultByID(suitId, 13);
-        return suitResults.get(0).getResponseBody();
-    }
+
 
     //获取json字符串的param部分（json，param.param1.param2）
     public String funGetJsonData(String fun) {
@@ -218,6 +217,19 @@ public class Fun {
         String body = ((SuitResult)object).getResponseBody();
 
         return funGetJsonData(key,body);
+    }
+
+    //获取case的body
+    public String funGetBodyBySuitID(String fun,Object object) {
+        int suitId = Integer.parseInt(fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_)")));
+        List<SuitResult> suitResults = caseSuitService.getSuitCaseResultByID(suitId, ((SuitResult)object).getBuildId());
+        return suitResults.get(0).getResponseBody();
+    }
+    public String funGetBodyBySuitID(String fun) {
+        int suitId = Integer.parseInt(fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_)")));
+        int buildId = suitResultDaoImp.getLastBuildIdBySuitId(String.valueOf(suitId));
+        List<SuitResult> suitResults = caseSuitService.getSuitCaseResultByID(suitId,buildId);
+        return suitResults.get(0).getResponseBody();
     }
 
     public String funResponseCodeEqual(String fun,Object object){

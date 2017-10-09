@@ -14,41 +14,25 @@ import java.util.List;
 public class CaseSuitDaoImp extends BaseDao{
 
     @Deprecated
-    public List<CaseSuit> getCaseSuitBySuit(String suitId){
+    public List<CaseSuit> getCaseSuitBySuit(String suitKey){
         return jdbcTemplate.query("select id,suitKey,suitName,caseid,requestType,requestUrl,requestHeader," +
-                "requestParameters,requestOrder,requestDependent,caseResult,assertExp from qa_suitcase where suitKey = ? order by requestOrder desc",
-                new RowMapper<CaseSuit>() {
-                    @Override
-                    public CaseSuit mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        CaseSuit caseSuit = new CaseSuit();
-                        caseSuit.setId(rs.getString("id"));
-                        caseSuit.setSuitKey(rs.getString("suitKey"));
-                        caseSuit.setSuitName(rs.getString("suitName"));
-                        caseSuit.setCaseId(rs.getString("caseid"));
-                        caseSuit.setRequestType(rs.getInt("requestType"));
-                        caseSuit.setRequestUrl(rs.getString("requestUrl"));
-                        caseSuit.setRequestHeader(rs.getString("requestHeader"));
-                        caseSuit.setRequestParamets(rs.getString("requestParameters"));
-                        caseSuit.setRequestOrder(rs.getInt("requestOrder"));
-                        caseSuit.setRequestDependent(rs.getString("requestDependent"));
-                        caseSuit.setCaseResult(rs.getInt("caseResult"));
-                        caseSuit.setAssertExp(rs.getString("assertExp"));
-                        return caseSuit;
-                    }
-                },suitId);
+                "requestParameters,requestOrder,requestDependent,caseResult,assertExp from qa_suitcase where suitKey = ? order by requestOrder asc",
+                new SuitRowMapper(),suitKey);
     }
 
-    public List<CaseSuit> getClassUitBySuitAndBuildId(String suitId,int buildId){
+/*    public List<CaseSuit> getClassUitBySuitAndBuildId(String suitId,int buildId){
         return jdbcTemplate.query("select id,suitKey,suitName,caseid,requestType,requestUrl,requestHeader," +
                         "requestParameters,requestOrder,requestDependent,caseResult,assertExp,buildId from qa_suitcase where suitKey =? and buildId=? order by requestOrder",
                 new SuitRowMapper(), suitId, buildId);
-    }
+    }*/
     /*
     public int saveCaseResultLog(SuitResult result){
         return jdbcTemplate.update("insert into qa_case_result_log(suitId,detail,status,resultBody,responseTime,assertLog,resultStatus,inserttime) values(?,?,?,?,?,?,?,now())",
                 result.getSuitGuid(),result.getRequestParameter(),result.getStatus(),result.getResultBody(),result.getResponseTime(),result.getAssertLog(),result.getResultStatus());
     }
     */
+
+
 }
 
 class SuitRowMapper implements RowMapper{
@@ -70,7 +54,8 @@ class SuitRowMapper implements RowMapper{
             caseSuit.setRequestDependent(rs.getString("requestDependent"));
             caseSuit.setCaseResult(rs.getInt("caseResult"));
             caseSuit.setAssertExp(rs.getString("assertExp"));
-            caseSuit.setBuildId(rs.getInt("buildId"));
+//            caseSuit.setBuildId(rs.getInt("buildId"));
+            caseSuit.setSuitKey(rs.getString("suitKey"));
         } catch (SQLException e) {
             e.printStackTrace();
         }

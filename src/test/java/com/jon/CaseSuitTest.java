@@ -2,6 +2,7 @@ package com.jon;
 
 import com.test.autocase.CaseControllerService;
 import com.test.fun.Fun;
+import com.test.suit.service.CaseSuitService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,16 @@ public class CaseSuitTest  extends AbstractTestNGSpringContextTests {
     @Autowired
     CaseControllerService caseControllerService;
 
-
+    @Autowired
+    CaseSuitService caseSuitService;
     @Test
     public void test(){
-        caseControllerService.runCase();
+        caseControllerService.runCase("service-platform",true);
+    }
+
+    @Test
+    public void getLastBuildID(){
+        System.out.println(caseSuitService.getLastBuild("service-platform"));
     }
     @Test
     public void test2(){

@@ -13,6 +13,7 @@ import com.test.suit.domain.SuitResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@Component
 public class CaseControllerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CaseControllerService.class);
@@ -36,11 +37,9 @@ public class CaseControllerService {
     AssertServer assertServer;
 
 
-    public void runCase(){
+    public void runCase(String suitKey,boolean isNew){
+        List<CaseSuit> cases = caseSuitService.getCaseBySuit(suitKey,isNew);
 
-        LOG.info("--------------");
-        //List<CaseSuit> cases = caseSuitService.getCaseBySuit("ocean_web");
-        List<CaseSuit> cases = caseSuitService.getCaseBySuitAndBuildID("service-platform",13);
 
         if ( cases.isEmpty()){
             return;
@@ -63,7 +62,7 @@ public class CaseControllerService {
                     e.printStackTrace();
                 }
                 SuitResult result;
-                result = new SuitResult(casesuit.getId(),casesuit.getBuildId(),requestInfo,map.get("ResponseHeaders"),map.get("ResponseBody"),
+                result = new SuitResult(casesuit.getId(),casesuit.getSuitKey(),casesuit.getBuildId(),requestInfo,map.get("ResponseHeaders"),map.get("ResponseBody"),
                         map.get("ResponseCode"),Integer.valueOf(map.get("ResponseTime")));
 
                 String exp = casesuit.getAssertExp();
@@ -89,9 +88,10 @@ public class CaseControllerService {
                     }
                 }
 
-                caseSuitService.saveCaseResultLog(result);
-
+                caseSuitService.saveResult(result,isNew);
             }
+            //统计
+            caseSuitService.saveReport(suitKey,String.valueOf(cases.get(0).getBuildId()));
         }
     }
 }
