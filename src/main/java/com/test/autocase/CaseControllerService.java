@@ -74,8 +74,7 @@ public class CaseControllerService {
                         assertServer.setResult(result);
                         Object object = assertServer.assertResult(assertExpList,result);
                         String r = mapper.writeValueAsString(object);
-                        Map<String,Object> resultMap = (Map<String, Object>) object;
-
+                        Map<String,Object> resultMap = (Map<String, Object>) assertServer.assertResult(assertExpList,result).get("assertResult");
 
                         if((boolean) resultMap.get("success")){
                             resultStatus = 1;

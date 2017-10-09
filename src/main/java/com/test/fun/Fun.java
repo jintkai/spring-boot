@@ -30,23 +30,23 @@ public class Fun {
     public String resolveFun(String funExp){
         String str = funExp;
         while (true) {
-            if (str.contains("FUN")) {
+            if (str.contains("Fun")) {
                 int end = str.indexOf("_)");
                 String tmp = str.substring(0, end + 2);
-                int begin = tmp.lastIndexOf("FUN");
+                int begin = tmp.lastIndexOf("Fun");
                 String fun = tmp.substring(begin);
                 String funReturn = "";
-                if (fun.contains("FUNSuit_("))
+                if (fun.contains("FunSuit_("))
                     funReturn = funGetBodyBySuitID(fun);
-                else if (fun.contains("FUNSUBSTRING_("))
+                else if (fun.contains("FunSUBSTRING_("))
                     funReturn = funGetSubstring(fun);
-                if (fun.contains("FUNJson_("))
+                if (fun.contains("FunJson_("))
                     funReturn = funGetJsonData(fun);
-                if (fun.contains("FUNBodyJson_("))
-                    funReturn = funGetBodyBySuitID(fun);
-                if (fun.contains("FUNRANDOM_("))
+                if (fun.contains("FunBodyJson_("))
+                    funReturn = getBodyJson(fun,null);
+                if (fun.contains("FunRANDOM_("))
                     funReturn = funRandom(fun);
-                if (fun.contains("FUNEqual_("))
+                if (fun.contains("FunEqual_("))
                     funReturn = funEqual(fun);
 
                 // * . ? + $ ^ [ ] ( ) { } | \ /
@@ -69,28 +69,30 @@ public class Fun {
     public String resolveFun(String funExp,Object object){
         String str = funExp;
         while (true) {
-            if (str.contains("FUN")) {
+            if (str.contains("Fun")) {
                 int end = str.indexOf("_)");
                 String tmp = str.substring(0, end + 2);
-                int begin = tmp.lastIndexOf("FUN");
+                int begin = tmp.lastIndexOf("Fun");
                 String fun = tmp.substring(begin);
                 String funReturn = "";
-                if (fun.contains("FUNResponseCodeEqual_("))
+                if (fun.contains("FunResponseCodeEqual_("))
                     funReturn = funResponseCodeEqual(fun,object);
-                if (fun.contains("FUNResponseJson_("))
+                if (fun.contains("FunResponseJson_("))
                     funReturn = getBodyJson(fun,object);
-                if (fun.contains("FUNSuit_("))
+                if (fun.contains("FunSuit_("))
                     funReturn = funGetBodyBySuitID(fun);
-                else if (fun.contains("FUNSUBSTRING_("))
+                else if (fun.contains("FunSUBSTRING_("))
                     funReturn = funGetSubstring(fun);
-                if (fun.contains("FUNJson_("))
+                if (fun.contains("FunJson_("))
                     funReturn = funGetJsonData(fun);
-                if (fun.contains("FUNBodyJson_("))
-                    funReturn = funGetBodyBySuitID(fun);
-                if (fun.contains("FUNRANDOM_("))
+                if (fun.contains("FunBodyJson_("))
+                    funReturn = getBodyJson(fun,object);
+                if (fun.contains("FunRANDOM_("))
                     funReturn = funRandom(fun);
-                if (fun.contains("FUNEqual_("))
+                if (fun.contains("FunEqual_("))
                     funReturn = funEqual(fun);
+                if (fun.contains("FunResponseCodeNotEqual_("))
+                    funReturn = funResponseCodeNoteEqual(fun,object);
                 // * . ? + $ ^ [ ] ( ) { } | \ /
                 fun = fun.replace("(", "\\(").replace(")", "\\)").replace("$", "\\$");
                 fun = fun.replace("{", "\\{").replace("}", "\\}");
@@ -149,12 +151,14 @@ public class Fun {
         return String.valueOf(i);
     }
 
+    //获取case的body
     public String funGetBodyBySuitID(String fun) {
         int suitId = Integer.parseInt(fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_)")));
         List<SuitResult> suitResults = caseSuitService.getSuitCaseResultByID(suitId, 13);
         return suitResults.get(0).getResponseBody();
     }
 
+    //获取json字符串的param部分（json，param.param1.param2）
     public String funGetJsonData(String fun) {
         String json = fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_,"));
         String param = fun.substring(fun.indexOf("_,") + 2, fun.indexOf("_)")).trim();
@@ -169,11 +173,12 @@ public class Fun {
         }
     }
 
+
     public String funGetJsonData(String key,String json){
         if (!key.contains(".")) {
             return getJsonValue(json, key);
         } else {
-            String[] keys = key.split(".");
+            String[] keys = key.split("\\.");
             for (int i = 0; i < keys.length; i++) {
                 json = getJsonValue(json, keys[i]);
             }
@@ -195,7 +200,7 @@ public class Fun {
             });
             JsonNode node = mapper.readTree(json);
             node = node.get(key);
-
+            //获取text的方法有问题
             if(node.isTextual()){
                 value = node.toString().substring(1, node.toString().length() - 1);
             }else{
@@ -207,6 +212,7 @@ public class Fun {
 
         return value;
     }
+    //获取json格式的body
     public String getBodyJson(String fun,Object object){
         String key = fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_)"));
         String body = ((SuitResult)object).getResponseBody();
@@ -219,6 +225,13 @@ public class Fun {
         String code = fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_)"));
         return String.valueOf(code.equals(body));
     }
+
+    public String funResponseCodeNoteEqual(String fun,Object object){
+        String body = ((SuitResult)object).getResponseCode();
+        String code = fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_)"));
+        return String.valueOf(!code.equals(body));
+    }
+
 
     public String funEqual(String fun){
         String expect = fun.substring(fun.indexOf("_(") + 2, fun.indexOf("_,")).trim();

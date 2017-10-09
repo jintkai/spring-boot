@@ -62,9 +62,10 @@ public class HttpClientService {
             method.setURI(new URI(requestUrl));
 
             if (null != requestParameters && !requestParameters.isEmpty()) {
-                String contentType = method.getRequestHeader("Content-Type").getValue();
+                Header header = method.getRequestHeader("Content-Type");
+                //String contentType = method.getRequestHeader("Content-Type").getValue();
 
-                if (!contentType.contains("application/json")) {
+                if (null == header || !header.getValue().contains("application/json")) {
                     List<NameValuePair> lists = new ArrayList<NameValuePair>();
                     String str = requestParameters;
                     String[] strs = str.split(",");
