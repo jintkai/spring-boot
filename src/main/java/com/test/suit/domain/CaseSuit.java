@@ -2,16 +2,18 @@ package com.test.suit.domain;
 
 public class CaseSuit {
 
-    private String id;
+    private int id;
     private String suitKey;
     private String suitName;
-    private String caseId;
+    private int caseId;
+    //请求类型0:get 1:post 2:put 3:delete
     private int requestType;
     private String requestUrl;
     private String requestHeader;
     private String requestParamets;
     private String requestDependent;
     private int requestOrder;
+    //0:成功 1:失败 2:未执行
     private int caseResult;
     private String assertExp;
     private int buildId;
@@ -19,7 +21,7 @@ public class CaseSuit {
     public CaseSuit() {
     }
 
-    public CaseSuit(String id, String suitKey, String suitName, String caseId, int requestType, String requestUrl, String requestHeader, String requestParamets, String requestDependent, int requestOrder, int caseResult, String assertExp, int buildId) {
+    public CaseSuit(int id, String suitKey, String suitName, int caseId, int requestType, String requestUrl, String requestHeader, String requestParamets, String requestDependent, int requestOrder, int caseResult, String assertExp, int buildId) {
         this.id = id;
         this.suitKey = suitKey;
         this.suitName = suitName;
@@ -83,21 +85,20 @@ public class CaseSuit {
         this.requestOrder = requestOrder;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
 
-
-    public String getCaseId() {
+    public int getCaseId() {
         return caseId;
     }
 
-    public void setCaseId(String caseId) {
+    public void setCaseId(int caseId) {
         this.caseId = caseId;
     }
 
@@ -140,4 +141,6 @@ public class CaseSuit {
     public void setRequestDependent(String requestDependent) {
         this.requestDependent = requestDependent;
     }
+
+
 }

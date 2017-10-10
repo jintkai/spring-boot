@@ -4,33 +4,42 @@ import java.util.Date;
 
 public class SuitResult {
 
-    private String suitid;
-    private int buildId;
     private int id;
-    private String requestInfo;
+    private int suitid;
+    private int buildId;
+    private String suitKey;
     private String responseHeaders;
     private String responseBody;
     private String responseCode;
-    private int responseTime;
+    private float responseTime;
     private String assertLog;
+    //0,1,2:未执行，执行成功，执行失败
     private int status;
     private Date insertTime;
+    private Date updateTime;
+
 
     public SuitResult() {
     }
 
-    public SuitResult(String suitid, int buildId, String requestInfo, String responseHeaders, String responseBody, String responseCode,
-                      int responseTime) {
+    public SuitResult(int suitid, int buildId, String suitKey, String responseHeaders, String responseBody, String responseCode, float responseTime, String assertLog, int status) {
         this.suitid = suitid;
         this.buildId = buildId;
-        this.requestInfo = requestInfo;
+        this.suitKey = suitKey;
         this.responseHeaders = responseHeaders;
         this.responseBody = responseBody;
         this.responseCode = responseCode;
         this.responseTime = responseTime;
         this.assertLog = assertLog;
         this.status = status;
-        this.insertTime = insertTime;
+    }
+
+    public String getSuitKey() {
+        return suitKey;
+    }
+
+    public void setSuitKey(String suitKey) {
+        this.suitKey = suitKey;
     }
 
     public String getResponseCode() {
@@ -41,11 +50,11 @@ public class SuitResult {
         this.responseCode = responseCode;
     }
 
-    public String getSuitid() {
+    public int getSuitid() {
         return suitid;
     }
 
-    public void setSuitid(String suitid) {
+    public void setSuitid(int suitid) {
         this.suitid = suitid;
     }
 
@@ -65,14 +74,6 @@ public class SuitResult {
         this.id = id;
     }
 
-    public String getRequestInfo() {
-        return requestInfo;
-    }
-
-    public void setRequestInfo(String requestInfo) {
-        this.requestInfo = requestInfo;
-    }
-
     public String getResponseHeaders() {
         return responseHeaders;
     }
@@ -89,11 +90,11 @@ public class SuitResult {
         this.responseBody = responseBody;
     }
 
-    public int getResponseTime() {
+    public float getResponseTime() {
         return responseTime;
     }
 
-    public void setResponseTime(int responseTime) {
+    public void setResponseTime(float responseTime) {
         this.responseTime = responseTime;
     }
 
@@ -119,5 +120,13 @@ public class SuitResult {
 
     public void setInsertTime(Date insertTime) {
         this.insertTime = insertTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }
