@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 public class CaseSuitDaoImp extends BaseDao{
 
+
     public List<CaseSuit> getCaseSuitBySuit(String suitKey){
         return jdbcTemplate.query("select id,suitKey,suitName,caseid,requestType,requestUrl,requestHeader," +
                 "requestParameters,requestOrder,requestDependent,caseResult,assertExp,buildId from qa_suitcase where suitKey = ? order by requestOrder desc",
@@ -54,13 +55,14 @@ public class CaseSuitDaoImp extends BaseDao{
         return jdbcTemplate.update("delete from qa_suitcase where id =?",id);
     }
 
-    /*
-    public int saveCaseResultLog(SuitResult result){
-        return jdbcTemplate.update("insert into qa_case_result_log(suitId,detail,status,resultBody,responseTime,assertLog,resultStatus,inserttime) values(?,?,?,?,?,?,?,now())",
-                result.getSuitGuid(),result.getRequestParameter(),result.getStatus(),result.getResultBody(),result.getResponseTime(),result.getAssertLog(),result.getResultStatus());
+
+    @Deprecated
+    public List<CaseSuit> getCaseSuitBySuit(String suitKey){
+        return jdbcTemplate.query("select id,suitKey,suitName,caseid,requestType,requestUrl,requestHeader," +
+                "requestParameters,requestOrder,requestDependent,caseResult,assertExp from qa_suitcase where suitKey = ? order by requestOrder asc",
+                new SuitRowMapper(),suitKey);
     }
-    */
-}
+
 
 class CaseSuitRowMapper implements RowMapper{
 
@@ -80,7 +82,8 @@ class CaseSuitRowMapper implements RowMapper{
             caseSuit.setRequestDependent(rs.getString("requestDependent"));
             caseSuit.setCaseResult(rs.getInt("caseResult"));
             caseSuit.setAssertExp(rs.getString("assertExp"));
-            caseSuit.setBuildId(rs.getInt("buildId"));
+//            caseSuit.setBuildId(rs.getInt("buildId"));
+            caseSuit.setSuitKey(rs.getString("suitKey"));
         } catch (SQLException e) {
             e.printStackTrace();
         }

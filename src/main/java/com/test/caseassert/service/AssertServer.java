@@ -2,6 +2,9 @@ package com.test.caseassert.service;
 
 import com.test.caseassert.domain.AssertExp;
 import com.test.caseassert.domain.AssertResult;
+import com.test.fun.FunService;
+import com.test.suit.domain.SuitResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.test.suit.domain.SuitResult;
 import org.springframework.stereotype.Component;
 import sun.reflect.generics.scope.Scope;
@@ -14,6 +17,8 @@ import java.util.Map;
 @Component
 public class AssertServer {
 
+    @Autowired
+    FunService funService;
 
 
     private Map<String,Object> map = new HashMap<String,Object>();
@@ -32,8 +37,8 @@ public class AssertServer {
 
     public void init(){
         map = new HashMap<String,Object>();
-        assertExpList = new ArrayList<>();
-        assertResults = new ArrayList<>();
+        assertExpList = new ArrayList<AssertExp>();
+        assertResults = new ArrayList<AssertResult>();
         success = true;
         resultMap = new HashMap<String,Object>();
     }
@@ -88,94 +93,20 @@ public class AssertServer {
     public void setResultMap(Map<String, Object> resultMap) {
         this.resultMap = resultMap;
     }
-
-    public Map<String,Object> assertResult(List<AssertExp> list){
+    public Map<String,Object> assertResult(List<String> list,SuitResult suitResult){
         init();
-        this.assertExpList = list;
-        for (int i = 0; i<assertExpList.size(); i++){
-            AssertExp assertExp = assertExpList.get(i);
-            String methodName = assertExp.getMethodName();
-            switch (methodName){
-                case "ResponseCodeEqual" :
-                    responseCodeEqual(assertExp);
-                    break;
-                case "ResponseCodeNotEqual" :
-                    responseCodeNotEqual(assertExp);
-                    break;
-                case "ResponseContain":
-                    responseContain(assertExp);
-                    break;
-                case "Equal":
-                    equal(assertExp);
-                    break;
-                default:
-                    responseCodeEqual(assertExp);
+        this.success = true;
+
+        for(int i = 0;i<list.size();i++){
+            String result = list.get(i);
+            if (result.equals("false")){
+                this.success = false;
             }
         }
+
+        resultMap.put("detail",list);
+        resultMap.put("success",success);
+        map.put("assertResult",resultMap);
         return map;
-    }
-
-    public void responseCodeEqual(AssertExp exp){
-        AssertResult assertResult = new AssertResult(exp, true);
-
-        if (result.getResponseCode().equals( exp.getParams())) {
-            assertResult.setSuccess(true);
-        }
-        else {
-            assertResult.setSuccess(false);
-            assertResult.setLog("状态码相等断言异常,期望值： "+exp.getParams()+" ，实际值： "+result.getResponseCode());
-            this.success = false;
-        }
-        assertResults.add(assertResult);
-        resultMap.put("detail",assertResults);
-        resultMap.put("success",success);
-        map.put("assertResult",resultMap);
-
-    }
-
-    public void responseCodeNotEqual(AssertExp exp){
-        AssertResult assertResult = new AssertResult(exp, false);
-        if (!result.getResponseCode().equals(exp.getParams()))
-            assertResult.setSuccess(true);
-        else {
-            assertResult.setSuccess(false);
-            this.success = false;
-        }
-        assertResults.add(assertResult);
-        resultMap.put("detail",assertResults);
-        resultMap.put("success",success);
-        map.put("assertResult",resultMap);
-    }
-
-    public void responseContain(AssertExp exp){
-        AssertResult assertResult = new AssertResult(exp, false);
-        if (result.getResponseBody().contains(exp.getParams())){
-            assertResult.setSuccess(true);
-        }else {
-            assertResult.setSuccess(false);
-            this.success = false;
-        }
-        assertResults.add(assertResult);
-        resultMap.put("detail",assertResults);
-        resultMap.put("success",success);
-        map.put("assertResult",resultMap);
-    }
-
-    public void equal(AssertExp exp){
-        AssertResult assertResult = new AssertResult(exp, false);
-        String tmp = exp.getParams();
-        String expect = tmp.substring(0,tmp.indexOf("_,"));
-        String actual = tmp.substring(tmp.indexOf("_,")+2);
-        if (expect.equals(actual)){
-            assertResult.setSuccess(true);
-        }else {
-            assertResult.setSuccess(false);
-            this.success = false;
-        }
-        assertResults.add(assertResult);
-        resultMap.put("detail",assertResults);
-        resultMap.put("success",success);
-        map.put("assertResult",resultMap);
-
     }
 }

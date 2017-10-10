@@ -36,7 +36,7 @@ public class DataSourceConfig {
         //ds.setJdbcUrl("jdbc:h2:tcp://localhost/~/test");
         ds.setJdbcUrl("jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=utf-8");
         ds.setUser("root");
-        ds.setPassword("jinkai1987");
+        ds.setPassword("123456");
         return ds;
     }
 

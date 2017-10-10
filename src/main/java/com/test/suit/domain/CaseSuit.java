@@ -143,4 +143,23 @@ public class CaseSuit {
     }
 
 
+    @Override
+    public String toString() {
+        return "CaseSuit{" +
+                "id='" + id + '\'' +
+                ", suitKey='" + suitKey + '\'' +
+                ", suitName='" + suitName + '\'' +
+                ", caseId='" + caseId + '\'' +
+                ", requestType=" + requestType +
+                ", requestUrl='" + requestUrl + '\'' +
+                ", requestHeader='" + requestHeader + '\'' +
+                ", requestParamets='" + requestParamets + '\'' +
+                ", requestDependent='" + requestDependent + '\'' +
+                ", requestOrder=" + requestOrder +
+                ", caseResult=" + caseResult +
+                ", assertExp='" + assertExp + '\'' +
+                ", buildId=" + buildId +
+                '}';
+    }
+
 }

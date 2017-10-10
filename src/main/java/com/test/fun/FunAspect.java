@@ -1,8 +1,10 @@
 package com.test.fun;
 
 import com.test.caseassert.domain.AssertExp;
+import com.test.suit.domain.SuitResult;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -30,18 +32,16 @@ public class FunAspect {
     public Object test(ProceedingJoinPoint pjp) throws Throwable{
         Object[] args = pjp.getArgs();
         String tmp = (String) args[1];
-        args[1] = funService.resolveFun(tmp);
+        args[1] = funService.resolveFun(tmp,null);
         if(null != args[2]) {
 
             tmp = (String) args[2];
-            args[2] = funService.resolveFun(tmp);
-            System.out.println("________________________" + args[2]);
+            args[2] = funService.resolveFun(tmp,null);
         }
         if(null != args[3]) {
 
             tmp = (String) args[3];
-            args[3] = funService.resolveFun(tmp);
-            System.out.println("________________________" + args[3]);
+            args[3] = funService.resolveFun(tmp,null);
         }
         Object retVal = pjp.proceed(args);
         return retVal;
@@ -53,23 +53,34 @@ public class FunAspect {
     @Around("assertExpPointcut()")
     public Object assertResult( ProceedingJoinPoint pjp ) throws Throwable {
         Object[] args = pjp.getArgs();
-        List<AssertExp> list = (List<AssertExp>) args[0];
-        List<AssertExp> tmp = new ArrayList<>();
+        List<String> list = (List<String>) args[0];
+        SuitResult suitResults = (SuitResult)args[1];
+        List<String> tmp = new ArrayList<String>();
         if (0 != args.length){
             tmp.clear();
             for (int i = 0;i< list.size();i++){
-                AssertExp assertExp = list.get(i);
-                String s = funService.resolveFun(list.get(i).getMethodName());
-                assertExp.setMethodName(s);
-                s = funService.resolveFun(list.get(i).getParams());
-                assertExp.setParams(s);
+                String assertExp = list.get(i);
+                String assertTmp = "{{"+assertExp+"}}";
+                String s = funService.resolveFun(assertTmp,suitResults);
+                assertExp = assertExp.replace(assertExp,s);
                 tmp.add(assertExp);
             }
         }
         args[0] = tmp;
         Map<String,Object> retVal = (Map<String, Object>) pjp.proceed(args);
         return retVal;
+    }
 
+
+    /**
+     * 拦截web层异常，记录异常日志，并返回友好信息到前端
+     * 目前只拦截Exception，是否要拦截Error需再做考虑
+     *
+     * @param e 异常对象
+     */
+    @AfterThrowing(pointcut = "annotationPointcut()", throwing = "e")
+    public void handleThrowing(Exception e) {
+        e.toString();
     }
 
 }
