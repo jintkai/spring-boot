@@ -37,8 +37,8 @@ public class AssertServer {
 
     public void init(){
         map = new HashMap<String,Object>();
-        assertExpList = new ArrayList<>();
-        assertResults = new ArrayList<>();
+        assertExpList = new ArrayList<AssertExp>();
+        assertResults = new ArrayList<AssertResult>();
         success = true;
         resultMap = new HashMap<String,Object>();
     }

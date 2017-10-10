@@ -4,20 +4,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jon.httpclient.HttpClientService;
-import com.test.caseassert.domain.AssertExp;
 import com.test.caseassert.service.AssertServer;
-import com.test.fun.Fun;
 import com.test.suit.domain.CaseSuit;
-import com.test.suit.service.CaseSuitService;
 import com.test.suit.domain.SuitResult;
+import com.test.suit.service.CaseSuitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +36,8 @@ public class CaseControllerService {
     public void runCase(String suitKey,boolean isNew){
         List<CaseSuit> cases = caseSuitService.getCaseBySuit(suitKey,isNew);
 
-
         if ( cases.isEmpty()){
+            LOG.info("case集合空，无需执行用例。");
             return;
         }else {
             for (CaseSuit casesuit :cases) {
@@ -49,7 +45,7 @@ public class CaseControllerService {
                 Map<String,String> map = httpClientService.sentRequest(casesuit.getRequestType(),casesuit.getRequestUrl(),casesuit.getRequestHeader(),
                         casesuit.getRequestParamets());
 
-                Map<String,Object> requestMap = new HashMap<>();
+                Map<String,Object> requestMap = new HashMap<String,Object>();
                 requestMap.put("RequestHeaders",map.get("RequestHeaders"));
                 requestMap.put("RequestParam",map.get("RequestParam"));
                 requestMap.put("URI",map.get("URI"));

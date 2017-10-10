@@ -54,7 +54,7 @@ public class FunAspect {
         Object[] args = pjp.getArgs();
         List<String> list = (List<String>) args[0];
         SuitResult suitResults = (SuitResult)args[1];
-        List<String> tmp = new ArrayList<>();
+        List<String> tmp = new ArrayList<String>();
         if (0 != args.length){
             tmp.clear();
             for (int i = 0;i< list.size();i++){

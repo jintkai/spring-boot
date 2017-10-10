@@ -131,7 +131,7 @@ public class Fun {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<String,Object>();
         String value = "";
         try {
             //mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -192,7 +192,7 @@ public class Fun {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<String,Object>();
         String value = "";
         try {
             map = mapper.readValue(json, new TypeReference<Map<String, Object>>() {
