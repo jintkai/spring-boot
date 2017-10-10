@@ -4,6 +4,7 @@ import com.test.caseassert.domain.AssertExp;
 import com.test.suit.domain.SuitResult;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -68,7 +69,18 @@ public class FunAspect {
         args[0] = tmp;
         Map<String,Object> retVal = (Map<String, Object>) pjp.proceed(args);
         return retVal;
+    }
 
+
+    /**
+     * 拦截web层异常，记录异常日志，并返回友好信息到前端
+     * 目前只拦截Exception，是否要拦截Error需再做考虑
+     *
+     * @param e 异常对象
+     */
+    @AfterThrowing(pointcut = "annotationPointcut()", throwing = "e")
+    public void handleThrowing(Exception e) {
+        e.toString();
     }
 
 }

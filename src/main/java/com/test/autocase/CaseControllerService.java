@@ -41,7 +41,7 @@ public class CaseControllerService {
             return;
         }else {
             for (CaseSuit casesuit :cases) {
-
+                LOG.debug("CaseSuit:"+casesuit.toString());
                 Map<String,String> map = httpClientService.sentRequest(casesuit.getRequestType(),casesuit.getRequestUrl(),casesuit.getRequestHeader(),
                         casesuit.getRequestParamets());
 
@@ -62,13 +62,15 @@ public class CaseControllerService {
                         map.get("ResponseCode"),Integer.valueOf(map.get("ResponseTime")));
 
                 String exp = casesuit.getAssertExp();
-                int resultStatus = 0;
+                int resultStatus = 1;
+                String r ="";
+                //断言转list<String>
                 if (null != exp && !exp.isEmpty()){
                     try {
                         List<String> assertExpList = new ObjectMapper().readValue(exp,new TypeReference<List<String>>() { });
                         assertServer.setResult(result);
                         Object object = assertServer.assertResult(assertExpList,result);
-                        String r = mapper.writeValueAsString(object);
+                         r = mapper.writeValueAsString(object);
                         Map<String,Object> resultMap = (Map<String, Object>) assertServer.assertResult(assertExpList,result).get("assertResult");
 
                         if((boolean) resultMap.get("success")){
@@ -76,12 +78,20 @@ public class CaseControllerService {
                         }
                         else
                             resultStatus = 2;
-                        result.setAssertLog(r);
-                        result.setStatus(resultStatus);
+
 
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        resultStatus = 2;
+                        r = "断言表达式格式错误！";
+                        LOG.error("断言转list<String>失败："+exp);
+                        LOG.error(e.toString());
                     }
+                    result.setAssertLog(r);
+                    result.setStatus(resultStatus);
+                }else{
+                    result.setAssertLog("未设置断言表达式!");
+                    result.setStatus(resultStatus);
+
                 }
 
                 caseSuitService.saveResult(result,isNew);

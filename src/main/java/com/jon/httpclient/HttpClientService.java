@@ -9,6 +9,8 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,6 +18,8 @@ import java.util.*;
 
 @Component
 public class HttpClientService {
+
+    public static final Logger LOG = LoggerFactory.getLogger(HttpClientService.class);
 
     public Map<String, String> sentRequest(int requestType, String requestUrl, String requestHeader, String requestParameters) {
 
@@ -41,8 +45,9 @@ public class HttpClientService {
         try {
             cls = Class.forName(className);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOG.error(e.toString());
         }
+
         Object object = null;
         try {
             object = cls.newInstance();
@@ -51,26 +56,36 @@ public class HttpClientService {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
         HttpMethod method = (HttpMethod) object;
         JSONObject jsonObject;
-        try {
-            jsonObject = new JSONObject(requestHeader);
 
-            Iterator iterator = jsonObject.keys();
-            while (iterator.hasNext()) {
-                String key = (String) iterator.next();
-                method.setRequestHeader(key, jsonObject.getString(key));
+        //请求头转json
+        if (!requestHeader.isEmpty()) {
+            LOG.info("requestHeader:"+requestHeader);
+            if(isJson(requestHeader)) {
+                try {
+                    jsonObject = new JSONObject(requestHeader);
+                    Iterator iterator = jsonObject.keys();
+                    while (iterator.hasNext()) {
+                        String key = (String) iterator.next();
+                        method.setRequestHeader(key, jsonObject.getString(key));
+                    }
+                } catch (Exception e) {
+                    LOG.error("requestHeader转json失败。" + e.toString());
+                }
+            }else{
+                LOG.error("requestHeader不是json格式，无法转换。" );
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+
         try {
             method.setURI(new URI(requestUrl));
 
             if (null != requestParameters && !requestParameters.isEmpty()) {
                 Header header = method.getRequestHeader("Content-Type");
-                //String contentType = method.getRequestHeader("Content-Type").getValue();
-
+                //非json
                 if (null == header || !header.getValue().contains("application/json")) {
                     List<NameValuePair> lists = new ArrayList<NameValuePair>();
                     String str = requestParameters;
@@ -100,6 +115,7 @@ public class HttpClientService {
                     map.put("RequestParam", Arrays.toString(pairs));
                 }
                 else {
+                    //json格式
                     RequestEntity entity = new StringRequestEntity(requestParameters);
                     ((PostMethod) method).setRequestEntity(entity);
 
@@ -120,6 +136,7 @@ public class HttpClientService {
 
         try {
             Date begin = new Date();
+
             httpClient.executeMethod(method);
             Date end = new Date();
             long responseTime = end.getTime() - begin.getTime();
