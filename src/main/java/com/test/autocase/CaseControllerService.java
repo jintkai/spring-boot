@@ -58,10 +58,9 @@ public class CaseControllerService {
                     e.printStackTrace();
                 }
                 SuitResult result;
-                result = new SuitResult(casesuit.getId(),casesuit.getSuitKey(),casesuit.getBuildId(),requestInfo,map.get("ResponseHeaders"),map.get("ResponseBody"),
-                        map.get("ResponseCode"),Integer.valueOf(map.get("ResponseTime")));
-
-                String exp = casesuit.getAssertExp();
+                result = new SuitResult(casesuit.getId(),casesuit.getBuildId(),casesuit.getSuitKey(),map.get("ResponseHeaders"),map.get("ResponseBody"),
+                        map.get("ResponseCode"),Float.valueOf(map.get("ResponseTime")),"",0);
+                    String exp = casesuit.getAssertExp();
                 int resultStatus = 1;
                 String r ="";
                 //断言转list<String>

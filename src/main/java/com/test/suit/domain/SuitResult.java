@@ -46,13 +46,7 @@ public class SuitResult {
         this.suitKey = suitKey;
     }
 
-    public String getSuitKey() {
-        return suitKey;
-    }
 
-    public void setSuitKey(String suitKey) {
-        this.suitKey = suitKey;
-    }
 
     public String getResponseCode() {
         return responseCode;

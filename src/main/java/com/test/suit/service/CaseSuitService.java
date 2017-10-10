@@ -17,6 +17,9 @@ public class CaseSuitService {
     @Autowired
     CaseSuitDaoImp caseSuitDaoImp;
 
+    @Autowired
+    SuitResultDaoImp suitResultDaoImp;
+
     public List<CaseSuit> getCaseBySuitAndBuildID(String suitId,int buildId){
         return caseSuitDaoImp.getClassUitBySuitAndBuildId(suitId,buildId);
     }

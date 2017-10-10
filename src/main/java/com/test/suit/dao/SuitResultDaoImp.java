@@ -50,7 +50,7 @@ public class SuitResultDaoImp extends BaseDao {
         return jdbcTemplate.update(
                 "insert into qa_case_result_his(buildId,suitId,requestInfo,responseHeaders,responseBody," +
                         "responseCode,responseTime,assertLog,status,inserttime) values(?,?,?,?,?,?,?,?,?,now())",
-                result.getBuildId(),result.getSuitid(),result.getRequestInfo(),result.getResponseHeaders(),result.getResponseBody(),
+                result.getBuildId(),result.getSuitid(),"",result.getResponseHeaders(),result.getResponseBody(),
                 result.getResponseCode(),result.getResponseTime(),result.getAssertLog(),result.getStatus());
 
     }
@@ -72,7 +72,7 @@ public class SuitResultDaoImp extends BaseDao {
     }
 
     public List<SuitResult> findCaseResultByID(int suitid,int buildID){
-        return jdbcTemplate.query("select id,buildid,suitid,responseCode,responseBody,responseTime,status" +
+        return jdbcTemplate.query("select id,buildid,suitid,responseCode,responseBody,responseTime,status,suitKey,responseHeaders,inserttime,updatetime,assertLog" +
                         " from qa_case_result where suitid =? and buildid=?",
                 new SuitResultRowMapper(), suitid,buildID);
     }
@@ -114,8 +114,8 @@ public class SuitResultDaoImp extends BaseDao {
 
     //每次构建后统计数据
     public void saveReport(String suitKey,String buildID){
-        List<SuitResult> list = jdbcTemplate.query("select id,buildid,suitid,responseCode,responseBody,responseTime,status" +
-                        " from qa_case_result where suitKey =? and buildid=?",
+        List<SuitResult> list = jdbcTemplate.query("select id,suitKey,buildid,suitid,responseCode,responseBody,responseTime,status,responseHeaders,inserttime,updatetime" +
+                        " ,assertLog from qa_case_result where suitKey =? and buildid=?",
                 new SuitResultRowMapper(), suitKey,buildID);
         jdbcTemplate.update("delete from qa_suit_report where suitKey =? and buildid=?",suitKey,buildID);
         int success = 0;
@@ -123,7 +123,7 @@ public class SuitResultDaoImp extends BaseDao {
         int unExecution = 0;
         int total = list.size();
         for (SuitResult suitResult:list){
-            switch (Integer.valueOf(suitResult.getStatus())){
+            switch (suitResult.getStatus()){
                 case 1:
                     success+=1;
                     break;
